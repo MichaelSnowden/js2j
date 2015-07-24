@@ -1,0 +1,7 @@
+#* @vtlvariable name="model" type="java.lang.String" *#
+(function injectJS() {
+    var script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.innerText = ${model};
+    document.head.appendChild(script);
+}())

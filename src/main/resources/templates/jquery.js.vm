@@ -1,0 +1,7 @@
+#* @vtlvariable name="model" type="java.lang.String" *#
+(function doJQuery() {
+    var x = $("${model}");
+    return {
+        selector: x.getSelector()
+    };
+}())

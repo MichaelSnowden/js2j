@@ -1,0 +1,6 @@
+package com.automation.web-pages;
+
+public class ${model.simpleClassName} extends BasePage {
+    public ${model.simpleClassName}(BaseTest baseTest) {
+    }
+}

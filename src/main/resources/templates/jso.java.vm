@@ -1,0 +1,61 @@
+#* @vtlvariable name="display" type="org.apache.velocity.tools.generic.DisplayTool" *#
+#* @vtlvariable name="model" type="com.michaelsnowden.js2j.JavaScriptObjectModel" *#
+package com.michaelsnowden.generated;
+
+import com.google.common.base.Joiner;
+import com.michaelsnowden.js2j.Javascript;
+
+public class ${model.simpleClassName} {
+    protected String varName;
+
+    public ${model.simpleClassName}(Object... args) {
+        String argStr = "(" + Joiner.on(", ").join(args) + ")";
+        String construction = "${model.staticName}" + argStr;
+        this.varName = Javascript.store(construction);
+    }
+
+
+//region Static Methods
+#foreach($function in $model.staticFunctions)
+    public static Object ${display.capitalize(${function.name})}(${function.paramString}) {
+        return Javascript.execScriptAndReturn("${model.staticName}.${function.script}");
+    }
+
+#end
+//endregion
+
+//region Methods
+#foreach($function in $model.functions)
+    public Object ${function.name}(${function.paramString}) {
+        return Javascript.execScriptAndReturn(varName + ".${function.script}");
+    }
+
+#end
+//endregion
+
+//region Setters and Getters
+#foreach($variable in ${model.variables})
+    public Object get${display.capitalize(${variable.name})}() {
+        return Javascript.execScriptAndReturn(varName + ".${variable.name}");
+    }
+
+    public void set${display.capitalize(${variable.name})}() {
+        Javascript.execScript(varName + ".${variable.name}");
+    }
+
+#end
+//endregion
+
+//region Static Setters and Getters
+#foreach($variable in ${model.staticVariables})
+    public static Object Get${display.capitalize(${variable.name})}() {
+        return Javascript.execScriptAndReturn("${model.staticName}.${variable.name}");
+    }
+
+    public static void Set${display.capitalize(${variable.name})}(Object newVal) {
+        Javascript.execScript("${model.staticName}.${variable.name} = " + newVal);
+    }
+
+#end
+//endregion
+}

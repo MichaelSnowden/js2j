@@ -1,0 +1,41 @@
+#* @vtlvariable name="model" type="java.lang.String" *#
+(function extractAll() {
+    var clazz = extract(${model});
+    var prototype = extract(${model}.prototype);
+
+    return {
+        staticFunctions: clazz.functions,
+        staticVariables: clazz.variables,
+        functions: prototype.functions,
+        variables: prototype.variables
+    };
+
+    function extract(from) {
+        var functions = [];
+        var variables = [];
+        for (var key in from) {
+            if (from.hasOwnProperty(key)) {
+                var val = from[key];
+                var type = Object.prototype.toString.call(val).match(/^\[object\s(.*)\]$/)[1];
+
+                switch (type) {
+                    case "Function":
+                        functions.push({
+                            name: key,
+                            params: annotate(val)
+                        });
+                        break;
+                    default:
+                        variables.push({
+                            name: key
+                        });
+                        break;
+                }
+            }
+        }
+        return {
+            functions: functions,
+            variables: variables
+        };
+    }
+}())
